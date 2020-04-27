@@ -1,11 +1,9 @@
-ipynb-notebooks
+chn-tools
 ---
 
 ### Requirements
 
 * **[Python](https://www.python.org/downloads/)** (3.6.8+)
-* **[node.js](https://nodejs.org/en/)** (11.15.0+)
-* **[npm](https://www.npmjs.com/get-npm)** (6.9.0+)
 * [virtualenv](https://pypi.org/project/virtualenv/) (option 1)
 * [conda](https://docs.conda.io/en/latest/miniconda.html) (option 2)
 
@@ -31,7 +29,17 @@ Ensure you activate your newly created environment before making any further cha
 
 * Using **conda**: ```conda activate chn```
 
-### 2/5: Install prerequesites (Linux)
+### 2/5: Install compilers (conda)
+
+If using **conda**, the following packages may be needed for compiling libraries:
+
+* On **Linux**: ```conda install gcc_linux-64 gxx_linux-64 gfortran_linux-64```
+
+* On **Mac**: ```conda install clang_osx-64 clangxx_osx-64 gfortran_osx-64```
+
+On **Windows** the Python ecosystem uses the Microsoft Visual C compiler (VisualStudio).
+
+### 3/5: Install prerequesites (Linux)
 
 Make sure to install the required development packages on Linux:
 
@@ -45,15 +53,17 @@ Make sure to install the required development packages on Linux:
 
 * On **SUSE**: ```sudo zypper install -t pattern devel_C_C++```
 
-#### 3/5: Install compilers (conda)
+#### Additional requirements
 
-If using **conda**, the following packages may be needed for compiling libraries:
+The following libraries may be required for **PyCluster** (Ubuntu/Debian; others will differ):
 
-* On **Linux**: ```conda install gcc_linux-64 gxx_linux-64 gfortran_linux-64```
+* ```sudo apt-get install python3-dev graphviz graphviz-dev libgraphviz-dev pkg-config```
 
-* On **Mac**: ```conda install clang_osx-64 clangxx_osx-64 gfortran_osx-64```
+Natural language processing with **TextProcessor** requires **[SpaCy models](https://spacy.io/usage/models)** and can be installed automatically on execution based on language detection, or manually by running e.g. for english:
 
-On **Windows** the Python ecosystem uses the Microsoft Visual C compiler (VisualStudio).
+* ``` python3 -m spacy download en ```
+
+Additional requirements for text conversion are also needed by **[textract](https://textract.readthedocs.io/en/latest/installation.html)** as per input file extension.
 
 ### 4/5: Install libraries (Python)
 
@@ -61,7 +71,7 @@ To install the required Python libraries from PyPI in your environment, run:
 
 * ```pip install -r requirements.txt```
 
-**Note:** alternatively, some listed packages are also available for installing from conda repositories.
+**Note:** alternatively, some listed packages are also available for installing from **conda** repositories.
 
 ### 5/5: Download chrome driver (Selenium)
 
@@ -76,3 +86,29 @@ mv chromedriver /usr/bin/chromedriver
 ```
 
 **Note:** you might check the most recent version released **[here](https://chromedriver.storage.googleapis.com/index.html)** before downloading.
+
+### Build and setup package (optional)
+
+Get all required libraries and install in your environment running:
+
+* ```python3 setup.py install```
+
+### Binary launcher (optional)
+
+For convenience, a symbolic link or alias to the launcher can optionally be added to your system. To do so, run the command below on your terminal of choice (replace ```/path/to/chn-tools.py``` accordingly):
+
+* On **Linux/Mac**: ```sudo ln -s /path/to/chn-tools.py /usr/local/bin/chn-tools```
+
+* On **Cmder** (Windows): ```alias chn-tools=python3 X:/path/to/chn-tools.py $*```
+
+* On **Git Bash** (Windows): ```echo "alias chn-tools=python3 X:/path/to/chn-tools.py" >> "${HOME}/.profile```
+
+This will link the **chn-tools.py** script file as ```chn-tools```. Restart your terminal for changes to take in effect.
+
+**Note:** you may also choose to link the script for launch with the default Command Prompt for Windows by adding a custom system environment variable.
+
+### Cleanup
+
+To remove build files and remaining data from previous executions, run:
+
+* ```python3 setup.py clean```
