@@ -34,7 +34,7 @@ seaborn==0.9.0
 six==1.12.0
 spacy==2.2.2
 statsmodels==0.10.1
-tensorflow==2.0.0
+tensorflow==2.0.1
 textract==1.6.3
 tika==1.19
 tqdm==4.36.1
