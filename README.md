@@ -15,9 +15,11 @@ For a detailed guide on installing the prerequesites, check [INSTALL.md](INSTALL
 
 * DataFrameTools
 * LinkThings
+* MarkovChainRender
 * MediaCollector
 * NetworkPlot
 * PyCluster
+* PyPhiNetwork
 * SubgraphManipulator
 * Text2WordCloud
 * TextProcessor
