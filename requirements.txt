@@ -15,7 +15,7 @@ newsapi-python==0.2.5
 newspaper3k==0.2.8
 news-please==1.4.23
 nltk==3.4.5
-numpy==1.16.2
+numpy==1.22.0
 openpyxl==3.0.0
 pandas==0.25.3
 plotly==3.10.0
