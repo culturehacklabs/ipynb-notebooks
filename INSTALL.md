@@ -1,114 +1,229 @@
-chn-tools
+ipynb-notebooks Installation Guide
 ---
 
-### Requirements
+## System Requirements
 
-* **[Python](https://www.python.org/downloads/)** (3.6.8+)
-* [virtualenv](https://pypi.org/project/virtualenv/) (option 1)
-* [conda](https://docs.conda.io/en/latest/miniconda.html) (option 2)
+* **[Python](https://www.python.org/downloads/)** 3.8.x (recommended)
+* **[pyenv](https://github.com/pyenv/pyenv)** (recommended for Python version management)
+* **System packages**: graphviz, graphviz-dev (for pygraphviz)
 
-The commands below assume your Python3 binary launcher is called with `python3`.
+## Recommended Installation Method
 
-If using the default `py` launcher on Windows, replace it with `py -3` when executing the lines below.
+This guide uses **pyenv** and Python 3.8.18 for maximum compatibility with the legacy packages in this repository.
 
-### 1/5: Create the environment
+### Step 1: Install pyenv
 
-In order to avoid conflicting library versions, it is advised to create a new virtual environment:
-
-* Using **virtualenv** (option 1): `python3 -m virtualenv chn --python=python3`
-
-* Using **conda** (option 2): `conda create -n chn python=3.6`
-
-#### Activate the environment
-
-Ensure you activate your newly created environment before making any further changes:
-
-* Using **virtualenv** (Linux): `source chn/bin/activate`
-
-* Using **virtualenv** (Windows): `chn/bin/activate`
-
-* Using **conda**: `conda activate chn`
-
-### 2/5: Install compilers (conda)
-
-If using **conda**, the following packages may be needed for compiling libraries:
-
-* On **Linux**: `conda install gcc_linux-64 gxx_linux-64 gfortran_linux-64`
-
-* On **Mac**: `conda install clang_osx-64 clangxx_osx-64 gfortran_osx-64`
-
-On **Windows** the Python ecosystem uses the Microsoft Visual C compiler (VisualStudio).
-
-### 3/5: Install prerequesites (Linux)
-
-Make sure to install the required development packages on Linux:
-
-* On **Ubuntu/Debian**: `sudo apt install build-essential python3-dev python3-tk`
-
-* On **Arch/Antergos/Manjaro**: `sudo pacman -S base-devel tk`
-
-* On **Fedora**: `sudo yum groupinstall "Development Tools"`
-
-* On **Mageia**: `sudo urpmi development-libs development-tools`
-
-* On **SUSE**: `sudo zypper install -t pattern devel_C_C++`
-
-#### Additional requirements
-
-The following libraries may be required for **MarkovChainRender** (Ubuntu/Debian; others will differ):
-
-* `sudo apt-get install python3-dev graphviz graphviz-dev libgraphviz-dev pkg-config`
-
-Natural language processing with **TextProcessor** requires **[SpaCy models](https://spacy.io/usage/models)** and can be installed automatically on execution based on language detection, or manually by running e.g. for english:
-
-* `python3 -m spacy download en`
-
-Additional requirements for text conversion are also needed by **[textract](https://textract.readthedocs.io/en/latest/installation.html)** as per input file extension.
-
-### 4/5: Install libraries (Python)
-
-To install the required Python libraries from PyPI in your environment, run:
-
-* `pip install -r requirements.txt`
-
-**Note:** alternatively, some listed packages are also available for installing from **conda** repositories.
-
-### 5/5: Download chrome driver (Selenium)
-
-To start crawling data with **[Selenium](https://www.seleniumhq.org/)**, it is required to install the binary chrome driver in your system.
-
-On Linux, run the following commands in order to make it available system-wide:
-
+**On Linux/macOS:**
+```bash
+curl https://pyenv.run | bash
 ```
-wget https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip
+
+Then add to your shell configuration (~/.bashrc, ~/.zshrc, etc.):
+```bash
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+```
+
+**On Windows:** Use [pyenv-win](https://github.com/pyenv-win/pyenv-win)
+
+Restart your shell or run `source ~/.bashrc` (or equivalent).
+
+### Step 2: Install Python 3.8.18
+
+```bash
+pyenv install 3.8.18
+```
+
+This will download and compile Python 3.8.18.
+
+### Step 3: Create Virtual Environment
+
+Navigate to the ipynb-notebooks directory and create the virtual environment:
+
+```bash
+cd /path/to/ipynb-notebooks
+~/.pyenv/versions/3.8.18/bin/python3.8 -m venv venv38
+```
+
+### Step 4: Activate the Environment
+
+**On Linux/macOS:**
+```bash
+source venv38/bin/activate
+```
+
+**On Windows:**
+```cmd
+venv38\Scripts\activate
+```
+
+You should see `(venv38)` in your terminal prompt.
+
+### Step 5: Install System Dependencies
+
+**On Ubuntu/Debian:**
+```bash
+sudo apt-get update
+sudo apt-get install -y build-essential python3-dev graphviz graphviz-dev libgraphviz-dev pkg-config
+```
+
+**On macOS (with Homebrew):**
+```bash
+brew install graphviz
+```
+
+**On Arch Linux:**
+```bash
+sudo pacman -S base-devel graphviz
+```
+
+**On Fedora:**
+```bash
+sudo dnf groupinstall "Development Tools"
+sudo dnf install graphviz graphviz-devel
+```
+
+These are required for:
+- **pygraphviz**: Network visualization
+- **MarkovChainRender**: Graph rendering
+- Various compiled packages
+
+### Step 6: Install Python Packages
+
+With the virtual environment activated:
+
+```bash
+pip install -r requirements_py38.txt
+```
+
+This will install all compatible packages including:
+- Core data science: numpy, pandas, matplotlib, scipy, scikit-learn
+- Deep learning: tensorflow, keras
+- NLP: spacy
+- Visualization: bokeh, plotly, holoviews, datashader
+- Web scraping: newspaper3k, news-please, scrapy
+- Network analysis: networkx, pygraphviz
+- And many more...
+
+**Note:** The original `requirements.txt` contains legacy packages from 2019-2020 that are incompatible with modern Python. Use `requirements_py38.txt` instead.
+
+### Step 7: Start Jupyter
+
+Launch Jupyter Notebook or JupyterLab:
+
+```bash
+# Option 1: Jupyter Notebook (classic interface)
+jupyter notebook
+
+# Option 2: JupyterLab (modern interface)
+jupyter lab
+```
+
+Your browser should open automatically to the Jupyter interface.
+
+## Optional: SpaCy Language Models
+
+For advanced NLP processing with **TextProcessor**, you may need SpaCy language models:
+
+```bash
+# English model
+python -m spacy download en_core_web_sm
+
+# Spanish model
+python -m spacy download es_core_news_sm
+
+# Other languages available at: https://spacy.io/models
+```
+
+## Optional: Selenium WebDriver
+
+For web scraping with **Selenium**, install ChromeDriver:
+
+**On Linux:**
+```bash
+# Download latest version from: https://chromedriver.chromium.org/downloads
+wget https://chromedriver.storage.googleapis.com/LATEST_RELEASE
+LATEST=$(cat LATEST_RELEASE)
+wget https://chromedriver.storage.googleapis.com/${LATEST}/chromedriver_linux64.zip
 unzip chromedriver_linux64.zip
-mv chromedriver /usr/bin/chromedriver
+sudo mv chromedriver /usr/local/bin/
+sudo chmod +x /usr/local/bin/chromedriver
 ```
 
-**Note:** you might check the most recent version released **[here](https://chromedriver.storage.googleapis.com/index.html)** before downloading.
+**On macOS:**
+```bash
+brew install chromedriver
+```
 
-### Build and setup package (optional)
+**On Windows:** Download from [ChromeDriver downloads](https://chromedriver.chromium.org/downloads) and add to PATH.
 
-Get all required libraries and install in your environment running:
+## Troubleshooting
 
-* `python3 setup.py install`
+### Issue: NLTK sqlite3 error
 
-### Binary launcher (optional)
+**Problem:** `ModuleNotFoundError: No module named '_sqlite3'`
 
-For convenience, a symbolic link or alias to the launcher can optionally be added to your system. To do so, run the command below on your terminal of choice (replace `/path/to/chn-tools.py` accordingly):
+**Cause:** The pyenv Python 3.8 build was compiled without sqlite3 support.
 
-* On **Linux/Mac**: `sudo ln -s /path/to/chn-tools.py /usr/local/bin/chn-tools`
+**Solution:** Most notebooks will work fine. If you need NLTK corpus functionality:
+1. Use alternative NLP libraries (spacy, textblob)
+2. Reinstall Python 3.8 with sqlite3 support:
+   ```bash
+   # Install sqlite3-dev first
+   sudo apt-get install libsqlite3-dev  # Ubuntu/Debian
+   # Then reinstall Python
+   pyenv uninstall 3.8.18
+   pyenv install 3.8.18
+   ```
 
-* On **Cmder** (Windows): `alias chn-tools=python3 X:/path/to/chn-tools.py $*`
+### Issue: Package dependency conflicts
 
-* On **Git Bash** (Windows): `echo "alias chn-tools=python3 X:/path/to/chn-tools.py" >> "${HOME}/.profile`
+**Problem:** Warning messages about incompatible package versions
 
-This will link the **chn-tools.py** script file as `chn-tools`. Restart your terminal for changes to take in effect.
+**Cause:** Some packages have overlapping dependency requirements
 
-**Note:** you may also choose to link the script for launch with the default Command Prompt for Windows by adding a custom system environment variable.
+**Solution:** These warnings are generally harmless. The environment has been tested and core functionality works. If you encounter actual errors, try:
+```bash
+pip install --upgrade <package-name>
+```
 
-### Cleanup
+### Issue: pygraphviz installation fails
 
-To remove build files and remaining data from previous executions, run:
+**Problem:** `error: command 'gcc' failed` or similar
 
-* `python3 setup.py clean`
+**Cause:** Missing system libraries
+
+**Solution:** Install graphviz system packages (see Step 5)
+
+### Deactivating the Environment
+
+When done working:
+```bash
+deactivate
+```
+
+### Removing the Environment
+
+To completely remove the virtual environment:
+```bash
+rm -rf venv38
+```
+
+## Alternative: Using Conda
+
+If you prefer conda over pyenv:
+
+```bash
+# Create environment
+conda create -n ipynb38 python=3.8
+
+# Activate
+conda activate ipynb38
+
+# Install graphviz
+conda install -c conda-forge graphviz
+
+# Install Python packages
+pip install -r requirements_py38.txt
+```
